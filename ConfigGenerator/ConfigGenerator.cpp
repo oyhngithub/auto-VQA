@@ -18,38 +18,44 @@ void ConfigGenerator::bashGenerator() {
 	FILE* bash = fopen(withPath.c_str(), "w");
 	//int height = 0;
 	//int width = 0;
+	int width, height, w, h;
 	switch (videoCommon.str2geo[m_projectionType]) {
 	case VideoCommon::ERP:
 	case VideoCommon::our:
-	case VideoCommon::TSP:
         fprintf(bash, "TAppEncoder.exe -c %s -c %s -c %s -c DynamicViewports.cfg --CodingFaceWidth=%d --CodingFaceHeight=%d --SphFile=sphere_655362.txt >%s_output.txt\n"
 			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), m_width, m_height, m_videoName.c_str());
 		break;
-
+	case VideoCommon::TSP:
+		h = sqrt(m_height * m_width / 2);
+		width = (h % 8) ? (8 + h / 8 * 8) : h;
+		height = width;
+		fprintf(bash, "TAppEncoder.exe -c %s -c %s -c %s -c DynamicViewports.cfg --CodingFaceWidth=%d --CodingFaceHeight=%d --SphFile=sphere_655362.txt >%s_output.txt\n"
+			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), width, height, m_videoName.c_str());
+		break;
 	case VideoCommon::ECP:
 	case VideoCommon::EAC:
 	case VideoCommon::CMP32:
 	case VideoCommon::ACP:
-		int w = m_height / 2;
-		int width = (w % 8) ? (8 + w / 8 * 8) : w;
-		int height = width;
+		w = sqrt(m_height * m_width / 6);
+		width = (w % 8) ? (8 + w / 8 * 8) : w;
+		height = width;
 		fprintf(bash, "TAppEncoder.exe -c %s -c %s -c %s -c DynamicViewports.cfg --CodingFaceWidth=%d --CodingFaceHeight=%d --SphFile=sphere_655362.txt >%s_output.txt\n"
 			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), width, height, m_videoName.c_str());
 		break;
 	case VideoCommon::COHP42:
-		int h = sqrt(m_width * m_height * sqrt(3) / 8);
-		int w = sqrt(m_width * m_height / 2 / sqrt(3));
-		int width = (w % 8) ? (8 + w / 8 * 8) : w;
-		int height = (h % 8) ? (8 + h / 8 * 8) : h;
+		h = sqrt(m_width * m_height * sqrt(3) / 8);
+		w = sqrt(m_width * m_height / 2 / sqrt(3));
+		width = (w % 8) ? (8 + w / 8 * 8) : w;
+		height = (h % 8) ? (8 + h / 8 * 8) : h;
 		fprintf(bash, "TAppEncoder.exe -c %s -c %s -c %s -c DynamicViewports.cfg --CodingFaceWidth=%d --CodingFaceHeight=%d --SphFile=sphere_655362.txt >%s_output.txt\n"
 			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), width, height, m_videoName.c_str());
 		break;
 	case VideoCommon::CISP:
 
-		int h = sqrt(m_width * m_height * sqrt(3) / 20);
-		int w = sqrt(m_width * m_height / 5 / sqrt(3));
-		int width = (w % 8) ? (8 + w / 8 * 8) : w;
-		int height = (h % 8) ? (8 + h / 8 * 8) : h;
+		h = sqrt(m_width * m_height * sqrt(3) / 20);
+		w = sqrt(m_width * m_height / 5 / sqrt(3));
+		width = (w % 8) ? (8 + w / 8 * 8) : w;
+		height = (h % 8) ? (8 + h / 8 * 8) : h;
 		fprintf(bash, "TAppEncoder.exe -c %s -c %s -c %s -c DynamicViewports.cfg --CodingFaceWidth=%d --CodingFaceHeight=%d --SphFile=sphere_655362.txt >%s_output.txt\n"
 			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), width, height, m_videoName.c_str());
 		break;
