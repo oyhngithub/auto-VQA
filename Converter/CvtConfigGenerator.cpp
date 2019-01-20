@@ -31,9 +31,14 @@ void CvtConfigGenerator::convertGenerate() {														//
 		}
 #pragma warning (disable : 4996)
 		FILE* file = fopen(cvtOutputDir.c_str(), "w");
+		int width, height, h, w;
+		width = height = h = w = 0;
 		switch (videoCommon.str2geo[dest[i]])
 		{
 		case VideoCommon::ACP:
+			w = m_height / 2;
+			width = (w % 8) ? (8 + w / 8 * 8) : w;
+			height = width;
 			fprintf(file, "#======== File I/O =====================\n");
 			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\ACP.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
@@ -51,8 +56,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "CodingFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 			fprintf(file, "                                                                        # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0                                   # 0: automatic calculation;\n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", width);
+			fprintf(file, "CodingFaceHeight                  : %d                                   # 0: automatic calculation;\n", height);
 			fprintf(file, "#ViewPortSettings                  : 80.0 80.0  -90.0  0.0               # view port settings: horizontal FOV [0,360], vertical FOV [0, 180], yaw [-180, 180], pitch [-90, 90]\n");
 			fprintf(file, "SphFile                           : sphere_655362.txt\n");
 			fprintf(file, "\n");
@@ -62,6 +67,10 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "\n");
 			break;
 		case VideoCommon::CISP:
+			h = sqrt(m_width * m_height * sqrt(3) / 20);
+			w = sqrt(m_width * m_height / 5 / sqrt(3));
+			width = (w % 8) ? (8 + w / 8 * 8) : w;
+			height = (h % 8) ? (8 + h / 8 * 8) : h;
 			fprintf(file, "#======== File I/O =====================\n");
 			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\CISP.yuv\n", m_description.c_str());
 			fprintf(file, "\n");
@@ -81,8 +90,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "CodingCompactFPStructure          : 1\n");
 			fprintf(file, "\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0                                   # 0: automatic calculation;\n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", width);
+			fprintf(file, "CodingFaceHeight                  : %d                                   # 0: automatic calculation;\n", height);
 			fprintf(file, "\n");
 			fprintf(file, "### DO NOT ADD ANYTHING BELOW THIS LINE ###\n");
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
@@ -90,6 +99,9 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "\n");
 			break;
 		case VideoCommon::CMP32:
+			w = m_height / 2;
+			width = (w % 8) ? (8 + w / 8 * 8) : w;
+			height = width;
 			fprintf(file, "#======== File I/O =====================\n");
 			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\CMP32.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
@@ -107,8 +119,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "CodingFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 			fprintf(file, "                                                                        # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0                                   # 0: automatic calculation;\n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", width);
+			fprintf(file, "CodingFaceHeight                  : %d                                   # 0: automatic calculation;\n", height);
 			fprintf(file, "#ViewPortSettings                  : 80.0 80.0  -90.0  0.0               # view port settings: horizontal FOV [0,360], vertical FOV [0, 180], yaw [-180, 180], pitch [-90, 90]\n");
 			fprintf(file, "SphFile                           : sphere_655362.txt\n");
 			fprintf(file, "\n");
@@ -118,6 +130,10 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "\n");
 			break;
 		case VideoCommon::COHP42:
+			h = sqrt(m_width * m_height * sqrt(3) / 8);
+			w = sqrt(m_width * m_height / 2 / sqrt(3));
+			width = (w % 8) ? (8 + w / 8 * 8) : w;
+			height = (h % 8) ? (8 + h / 8 * 8) : h;
 			fprintf(file, "#======== File I/O =====================\n");
 			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\COHP42.yuv\n", m_description.c_str());
 			fprintf(file, "\n");
@@ -138,8 +154,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "\n");
 			fprintf(file, "\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0  \n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", width);
+			fprintf(file, "CodingFaceHeight                  : %d  \n", height);
 			fprintf(file, "\n");
 			fprintf(file, "### DO NOT ADD ANYTHING BELOW THIS LINE ###\n");
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
@@ -147,6 +163,9 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "\n");
 			break;
 		case VideoCommon::EAC:
+			w = m_height / 2;
+			width = (w % 8) ? (8 + w / 8 * 8) : w;
+			height = width;
 			fprintf(file, "#======== File I/O =====================\n");
 			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\EAC.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
@@ -164,8 +183,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "CodingFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 			fprintf(file, "                                                                        # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0                                   # 0: automatic calculation;\n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", width);
+			fprintf(file, "CodingFaceHeight                  : %d                                   # 0: automatic calculation;\n", height);
 			fprintf(file, "#ViewPortSettings                  : 80.0 80.0  -90.0  0.0               # view port settings: horizontal FOV [0,360], vertical FOV [0, 180], yaw [-180, 180], pitch [-90, 90]\n");
 			fprintf(file, "SphFile                           : sphere_655362.txt\n");
 			fprintf(file, "\n");
@@ -192,8 +211,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "CodingFPStructure                 : 2 3   2 0 3 0 4 0 1 90 5 270 0 90  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 			fprintf(file, "                                                                        # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0                                   # 0: automatic calculation;\n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", m_width);
+			fprintf(file, "CodingFaceHeight                  : %d                                   # 0: automatic calculation;\n", m_height);
 			fprintf(file, "#ViewPortSettings                  : 80.0 80.0  -90.0  0.0               # view port settings: horizontal FOV [0,360], vertical FOV [0, 180], yaw [-180, 180], pitch [-90, 90]\n");
 			fprintf(file, "SphFile                           : sphere_655362.txt\n");
 			fprintf(file, "\n");
@@ -221,8 +240,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "CodingFPStructure                 : 1 1   0 0                           # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 			fprintf(file, "                                                                        # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0                                   # 0: automatic calculation;\n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", m_width);
+			fprintf(file, "CodingFaceHeight                  : %d                                   # 0: automatic calculation;\n", m_height);
 			fprintf(file, "\n");
 			fprintf(file, "SphFile                           : sphere_655362.txt\n");
 			fprintf(file, "\n");
@@ -233,6 +252,9 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "\n");
 			break;
 		case VideoCommon::RSP:
+			w = m_height / 2;
+			width = (w % 8) ? (8 + w / 8 * 8) : w;
+			height = width;
 			fprintf(file, "#======== File I/O =====================\n");
 			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\RSP.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
@@ -250,8 +272,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "CodingFPStructure                 : 2 3   4 0 0 0 5 0   3 0 1 0 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 			fprintf(file, "                                                                        # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0                                   # 0: automatic calculation;\n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", width);
+			fprintf(file, "CodingFaceHeight                  : %d                                   # 0: automatic calculation;\n", height);
 			fprintf(file, "#ViewPortSettings                  : 80.0 80.0  -90.0  0.0               # view port settings: horizontal FOV [0,360], vertical FOV [0, 180], yaw [-180, 180], pitch [-90, 90]\n");
 			fprintf(file, "SphFile                           : sphere_655362.txt\n");
 			fprintf(file, "\n");
@@ -278,8 +300,8 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "CodingFPStructure                 : 1 2   0 0 1 0                       # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 			fprintf(file, "                                                                        # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 			fprintf(file, "SVideoRotation                    : 0 0 0                               # rotation along X, Y, Z;                 \n");
-			fprintf(file, "CodingFaceWidth                   : 0                                   # 0: automatic calculation;\n");
-			fprintf(file, "CodingFaceHeight                  : 0                                   # 0: automatic calculation;\n");
+			fprintf(file, "CodingFaceWidth                   : %d                                   # 0: automatic calculation;\n", m_width);
+			fprintf(file, "CodingFaceHeight                  : %d                                   # 0: automatic calculation;\n", m_height);
 			fprintf(file, "#ViewPortSettings                  : 80.0 80.0  -90.0  0.0               # view port settings: horizontal FOV [0,360], vertical FOV [0, 180], yaw [-180, 180], pitch [-90, 90]\n");
 			fprintf(file, "#SphFile                           : sphere_655362.txt\n");
 			fprintf(file, "\n");

@@ -30,16 +30,28 @@ void ConfigGenerator::bashGenerator() {
 	case VideoCommon::EAC:
 	case VideoCommon::CMP32:
 	case VideoCommon::ACP:
+		int w = m_height / 2;
+		int width = (w % 8) ? (8 + w / 8 * 8) : w;
+		int height = width;
 		fprintf(bash, "TAppEncoder.exe -c %s -c %s -c %s -c DynamicViewports.cfg --CodingFaceWidth=%d --CodingFaceHeight=%d --SphFile=sphere_655362.txt >%s_output.txt\n"
-			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), (m_height / 2)  ? (8 + (m_height / 2) / 8 * 8) : (m_height / 2), (m_height / 2) ? (8 + (m_height / 2) / 8 * 8) : (m_height / 2), m_videoName.c_str());
+			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), width, height, m_videoName.c_str());
 		break;
 	case VideoCommon::COHP42:
+		int h = sqrt(m_width * m_height * sqrt(3) / 8);
+		int w = sqrt(m_width * m_height / 2 / sqrt(3));
+		int width = (w % 8) ? (8 + w / 8 * 8) : w;
+		int height = (h % 8) ? (8 + h / 8 * 8) : h;
 		fprintf(bash, "TAppEncoder.exe -c %s -c %s -c %s -c DynamicViewports.cfg --CodingFaceWidth=%d --CodingFaceHeight=%d --SphFile=sphere_655362.txt >%s_output.txt\n"
-			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), (m_height / 2) ? (8 + (m_height / 2) / 8 * 8) : (m_height / 2), (m_width / 2) ? (8 + (m_width / 2) / 8 * 8) : (m_width / 2), m_videoName.c_str());
+			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), width, height, m_videoName.c_str());
 		break;
 	case VideoCommon::CISP:
+
+		int h = sqrt(m_width * m_height * sqrt(3) / 20);
+		int w = sqrt(m_width * m_height / 5 / sqrt(3));
+		int width = (w % 8) ? (8 + w / 8 * 8) : w;
+		int height = (h % 8) ? (8 + h / 8 * 8) : h;
 		fprintf(bash, "TAppEncoder.exe -c %s -c %s -c %s -c DynamicViewports.cfg --CodingFaceWidth=%d --CodingFaceHeight=%d --SphFile=sphere_655362.txt >%s_output.txt\n"
-			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), (m_width / 5 * 2) ? (8 + (m_width / 5 * 2) / 8 * 8) : (m_width / 5 * 2), (m_height / 4) ? (8 + (m_height / 4) / 8 * 8) : (m_height / 4), m_videoName.c_str());
+			, m_format_resolution_randomaccess_main.c_str(), m_encoder_360_format.c_str(), m_format_resolution_360test.c_str(), width, height, m_videoName.c_str());
 		break;
 	/*case VideoCommon::ECP:
 	case VideoCommon::EAC:
