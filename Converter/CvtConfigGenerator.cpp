@@ -294,6 +294,7 @@ void CvtConfigGenerator::convertGenerate() {
 			fprintf(file, "\n");
 			break;
 		}		
+		fclose(file);
 	}
 }
 
@@ -321,6 +322,7 @@ void CvtConfigGenerator::testGenerate(char* inputVideoName, int width, int heigh
 		fprintf(file, "\n");
 		fprintf(file, "#Level                         : 5.2\n");
 		fprintf(file, "\n");
+		fclose(file);
 	}
 }
 
@@ -331,7 +333,8 @@ void CvtConfigGenerator::batGenerate() {
 		outputDir = outputDir + "/" + dest[i] + "_" + m_resolution + ".bat";
 #pragma warning (disable : 4996)
 		FILE *file = fopen(outputDir.c_str(), "w");
-		fprintf(file, "C:\\hm-360lib\\HM-16.16\\bin\\vc2015\\x64\\Debug\\Test\\convert\\TApp360Convert.exe -c 360convert_ERP_%s_test.cfg -c 360test_test_sequence.cfg\npause", dest[i].c_str());
+		fprintf(file, "C:\\hm-360lib\\HM-16.16\\bin\\vc2015\\x64\\Debug\\Test\\convert\\TApp360Convert.exe -c C:\\VRTest\\ERP_%s\\360convert_ERP_%s_test.cfg -c C:\\VRTest\\ERP_%s\\360test_test_sequence.cfg", dest[i].c_str(), dest[i].c_str(), dest[i].c_str());
+		fclose(file);
 	}
 }
 
