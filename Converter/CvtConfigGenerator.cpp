@@ -6,17 +6,9 @@ CvtConfigGenerator::CvtConfigGenerator()
 {
 }
 
-CvtConfigGenerator::CvtConfigGenerator(char* inputVideoName)
+CvtConfigGenerator::CvtConfigGenerator(char* inputVideoName):m_inputVideoName(inputVideoName)
 {
-	videoCommon.initialCommon();
-	m_inputVideoName = inputVideoName;
-	int head = m_inputVideoName.find("_") + 1;
-	int tail = m_inputVideoName.find("_", head + 1);//TODO.
-	m_resolution = m_inputVideoName.substr(head, tail - head);
-	int block = m_inputVideoName.find("x");
-	m_width = std::atoi(m_inputVideoName.substr(head, block).c_str());
-	m_height = std::atoi(m_inputVideoName.substr(block + 1, tail - block).c_str());
-
+	getInfo();
 	testGenerate(inputVideoName, m_width, m_height, 1);
 	convertGenerate();
 	batGenerate();
@@ -27,20 +19,23 @@ void CvtConfigGenerator::convertGenerate(int width, int height) {
 
 }
 
-void CvtConfigGenerator::convertGenerate() {
+void CvtConfigGenerator::convertGenerate() {														//
 	std::string dest[9] = { "ACP", "CISP", "CMP32", "COHP42", "EAC", "ECP", "our", "RSP", "TSP" };
 
 	for (int i = 0; i < 9; ++i) {
-		m_cvtName = "360convert_ERP_" + dest[i] + "_test.cfg";
-		std::string fileName = "360convert_ERP_" + dest[i] + "_test.cfg";
-		std::string outputDir = "C:/VRTest/ERP_" + dest[i] + "/" + fileName;
+		std::string cvtFileName = "360convert_ERP_" + dest[i] + "_test.cfg";
+		std::string cvtOutputDir = "C:/VRTest/ERP_" + dest[i] + "/" + cvtFileName;
+		std::string videoOutputDir = "C:\\VRTest\\sequence_cvt\\" + m_description;
+		if (!boost::filesystem::exists(videoOutputDir.c_str())) {
+			boost::filesystem::create_directories(videoOutputDir.c_str());
+		}
 #pragma warning (disable : 4996)
-		FILE* file = fopen(outputDir.c_str(), "w");
+		FILE* file = fopen(cvtOutputDir.c_str(), "w");
 		switch (videoCommon.str2geo[dest[i]])
 		{
 		case VideoCommon::ACP:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\ACP.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\ACP.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
 			fprintf(file, "#======== Unit definition ================\n");
 			fprintf(file, "FaceSizeAlignment             : 1           # face size alignment;\n");
@@ -68,7 +63,7 @@ void CvtConfigGenerator::convertGenerate() {
 			break;
 		case VideoCommon::CISP:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\CISP.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\CISP.yuv\n", m_description.c_str());
 			fprintf(file, "\n");
 			fprintf(file, "#======== Unit definition ================\n");
 			fprintf(file, "FaceSizeAlignment             : 1           # face size alignment;\n");
@@ -96,7 +91,7 @@ void CvtConfigGenerator::convertGenerate() {
 			break;
 		case VideoCommon::CMP32:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\CMP32.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\CMP32.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
 			fprintf(file, "#======== Unit definition ================\n");
 			fprintf(file, "FaceSizeAlignment             : 1           # face size alignment;\n");
@@ -124,7 +119,7 @@ void CvtConfigGenerator::convertGenerate() {
 			break;
 		case VideoCommon::COHP42:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\COHP42.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\COHP42.yuv\n", m_description.c_str());
 			fprintf(file, "\n");
 			fprintf(file, "#======== Unit definition ================\n");
 			fprintf(file, "FaceSizeAlignment             : 1           # face size alignment;\n");
@@ -153,7 +148,7 @@ void CvtConfigGenerator::convertGenerate() {
 			break;
 		case VideoCommon::EAC:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\EAC.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\EAC.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
 			fprintf(file, "#======== Unit definition ================\n");
 			fprintf(file, "FaceSizeAlignment             : 1           # face size alignment;\n");
@@ -181,7 +176,7 @@ void CvtConfigGenerator::convertGenerate() {
 			break;
 		case VideoCommon::ECP:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\ECP.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\ECP.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
 			fprintf(file, "#======== Unit definition ================\n");
 			fprintf(file, "FaceSizeAlignment             : 1           # face size alignment;\n");
@@ -209,7 +204,7 @@ void CvtConfigGenerator::convertGenerate() {
 			break;
 		case VideoCommon::our:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\our.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\our.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
 			fprintf(file, "\n");
 			fprintf(file, "#======== Unit definition ================\n");
@@ -239,7 +234,7 @@ void CvtConfigGenerator::convertGenerate() {
 			break;
 		case VideoCommon::RSP:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\RSP.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\RSP.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
 			fprintf(file, "#======== Unit definition ================\n");
 			fprintf(file, "FaceSizeAlignment             : 1           # face size alignment;\n");
@@ -267,7 +262,7 @@ void CvtConfigGenerator::convertGenerate() {
 			break;
 		case VideoCommon::TSP:
 			fprintf(file, "#======== File I/O =====================\n");
-			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\TSP.yuv\n");
+			fprintf(file, "OutputFile                    : C:\\VRTest\\sequence_cvt\\%s\\TSP.yuv\n", m_description.c_str());
 			fprintf(file, "#RefFile                       : reference_file_name\n");
 			fprintf(file, "#======== Unit definition ================\n");
 			fprintf(file, "FaceSizeAlignment             : 1           # face size alignment;\n");
@@ -301,7 +296,6 @@ void CvtConfigGenerator::convertGenerate() {
 void CvtConfigGenerator::testGenerate(char* inputVideoName, int width, int height, int frameSize) {
 	std::string dest[9] = {"ACP", "CISP", "CMP32", "COHP42", "EAC", "ECP", "our", "RSP", "TSP"};
 	for (int i = 0; i < 9; ++i) {
-		m_cvtName = dest[i] + "_" +  m_resolution;
 		std::string outputName = "360test_test_sequence.cfg";
 		std::string outputDir = "C:/VRTest/ERP_" + dest[i];
 		if (!boost::filesystem::exists(outputDir)) {
@@ -345,6 +339,18 @@ void CvtConfigGenerator::runBatch() {
 		outputDir = outputDir + "//" + dest[i] + "_" + m_resolution + ".bat";
 		system(outputDir.c_str());
 	}
+}
+
+void CvtConfigGenerator::getInfo()
+{
+	videoCommon.initialCommon();
+	int head = m_inputVideoName.find("_") + 1;
+	int tail = m_inputVideoName.find("_", head + 1);//TODO.
+	m_resolution = m_inputVideoName.substr(head, tail - head);
+	int block = m_inputVideoName.find("x");
+	m_width = std::atoi(m_inputVideoName.substr(head, block).c_str());
+	m_height = std::atoi(m_inputVideoName.substr(block + 1, tail - block).c_str());
+	m_description = m_inputVideoName.substr(0, head - 1);
 }
 
 CvtConfigGenerator::~CvtConfigGenerator()
