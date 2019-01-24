@@ -11,8 +11,8 @@ CvtConfigGenerator::CvtConfigGenerator(char* inputVideoName):m_inputVideoName(in
 	getInfo();
 	testGenerate(inputVideoName, m_width, m_height, 1);
 	convertGenerate();
-	batGenerate();
-	runBatch();
+	//batGenerate();
+	//runBatch();
 }
 
 void CvtConfigGenerator::convertGenerate(int width, int height) {
@@ -21,6 +21,36 @@ void CvtConfigGenerator::convertGenerate(int width, int height) {
 
 void CvtConfigGenerator::convertGenerate() {														//
 	std::string dest[9] = { "ACP", "CISP", "CMP32", "COHP42", "EAC", "ECP", "our", "RSP", "TSP" };
+	std::string shellDir = "C:\\VRTest\\sequence_cvt\\" + m_description + "\\shell";
+	if (!boost::filesystem::exists(shellDir.c_str())) {
+		boost::filesystem::create_directories(shellDir.c_str());
+	}
+	std::string erpShellDir = shellDir + "\\ERP.sh";
+#pragma warning (disable : 4996)
+	FILE* shellFile = fopen(erpShellDir.c_str(), "w");
+	fprintf(shellFile, "#!/bin/bash\n");
+	fprintf(shellFile, "for((i=1;i<10;++i))\n");
+	fprintf(shellFile, "do\n");
+	fprintf(shellFile, "	w=`expr %d \\* $i / 10`\n", m_width);
+	fprintf(shellFile, "	h=`expr %d \\* $i / 10`\n", m_height);
+	fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+	fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+	fprintf(shellFile, "	o=0\n");
+	fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+	fprintf(shellFile, "	then \n");
+	fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+	fprintf(shellFile, "	fi\n");
+	fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+	fprintf(shellFile, "	then\n");
+	fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+	fprintf(shellFile, "	fi\n");
+	fprintf(shellFile, "	echo \"$w $h\"\n");
+	fprintf(shellFile, "	pixel=${w}x${h}\n");
+	fprintf(shellFile, "	echo \"$pixel\"\n");
+	fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v %dx%d -r 30 -i ERP_%dx%d_30Hz_8b_420.yuv "
+		"-s ${pixel} ERP_${pixel}_30Hz_8b_420.yuv \n", m_width, m_height, m_width, m_height );
+	fprintf(shellFile, "done\n");
+	fclose(shellFile);
 
 	for (int i = 0; i < 9; ++i) {
 		std::string cvtFileName = "360convert_ERP_" + dest[i] + "_test.cfg";
@@ -33,6 +63,16 @@ void CvtConfigGenerator::convertGenerate() {														//
 		FILE* file = fopen(cvtOutputDir.c_str(), "w");
 		int width, height, h, w;
 		width = height = h = w = 0;
+
+		std::string acpShellDir;
+		std::string cispShellDIr;
+		std::string cmpShellDIr;
+		std::string cohpShellDIr;
+		std::string eacShellDIr;
+		std::string ecpShellDir;
+		std::string ourShellDir;
+		std::string tspShellDir;
+
 		switch (videoCommon.str2geo[dest[i]])
 		{
 		case VideoCommon::ACP:
@@ -65,6 +105,32 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
 			fprintf(file, "\n");
 			fprintf(file, "\n");
+
+			acpShellDir = shellDir + "\\ACP.sh";
+			shellFile = fopen(acpShellDir.c_str(), "w");
+			fprintf(shellFile, "#!/bin/bash\n");
+			fprintf(shellFile, "for((i=1;i<10;++i))\n");
+			fprintf(shellFile, "do\n");
+			fprintf(shellFile, "	w=`expr %d \\* $i / 10`\n", width * 3);
+			fprintf(shellFile, "	h=`expr %d \\* $i / 10`\n", height * 2);
+			fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+			fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+			fprintf(shellFile, "	o=0\n");
+			fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+			fprintf(shellFile, "	then \n");
+			fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+			fprintf(shellFile, "	then\n");
+			fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	echo \"$w $h\"\n");
+			fprintf(shellFile, "	pixel=${w}x${h}\n");
+			fprintf(shellFile, "	echo \"$pixel\"\n");
+			fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v %dx%d -r 30 -i ACP_%dx%d_30Hz_8b_420.yuv "
+				"-s ${pixel} ACP_${pixel}_30Hz_8b_420.yuv \n", width * 3, height  * 2, width * 3, height * 2);
+			fprintf(shellFile, "done\n");
+			fclose(shellFile);
 			break;
 		case VideoCommon::CISP:
 			h = sqrt(m_width * m_height * sqrt(3) / 20);
@@ -97,6 +163,32 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
 			fprintf(file, "\n");
 			fprintf(file, "\n");
+
+			cispShellDIr = shellDir + "\\CISP.sh";
+			shellFile = fopen(cispShellDIr.c_str(), "w");
+			fprintf(shellFile, "#!/bin/bash\n");
+			fprintf(shellFile, "for((i=1;i<10;++i))\n");
+			fprintf(shellFile, "do\n");
+			fprintf(shellFile, "	w=`expr REPLACE \\* $i / 10`\n");
+			fprintf(shellFile, "	h=`expr REPLACE \\* $i / 10`\n");
+			fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+			fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+			fprintf(shellFile, "	o=0\n");
+			fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+			fprintf(shellFile, "	then \n");
+			fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+			fprintf(shellFile, "	then\n");
+			fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	echo \"$w $h\"\n");
+			fprintf(shellFile, "	pixel=${w}x${h}\n");
+			fprintf(shellFile, "	echo \"$pixel\"\n");
+			fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v REPLACExREPLACE -r 30 -i CISP_REPLACExREPLACE_30Hz_8b_420.yuv "
+				"-s ${pixel} CISP_${pixel}_30Hz_8b_420.yuv \n");
+			fprintf(shellFile, "done\n");
+			fclose(shellFile);
 			break;
 		case VideoCommon::CMP32:
 			w = sqrt(m_height * m_width / 6);
@@ -128,6 +220,32 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
 			fprintf(file, "\n");
 			fprintf(file, "\n");
+
+			cmpShellDIr = shellDir + "\\CMP.sh";
+			shellFile = fopen(cmpShellDIr.c_str(), "w");
+			fprintf(shellFile, "#!/bin/bash\n");
+			fprintf(shellFile, "for((i=1;i<10;++i))\n");
+			fprintf(shellFile, "do\n");
+			fprintf(shellFile, "	w=`expr %d \\* $i / 10`\n", width * 3);
+			fprintf(shellFile, "	h=`expr %d \\* $i / 10`\n", height * 2);
+			fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+			fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+			fprintf(shellFile, "	o=0\n");
+			fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+			fprintf(shellFile, "	then \n");
+			fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+			fprintf(shellFile, "	then\n");
+			fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	echo \"$w $h\"\n");
+			fprintf(shellFile, "	pixel=${w}x${h}\n");
+			fprintf(shellFile, "	echo \"$pixel\"\n");
+			fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v %dx%d -r 30 -i CMP32_%dx%d_30Hz_8b_420.yuv "
+				"-s ${pixel} CMP32_${pixel}_30Hz_8b_420.yuv \n", width * 3, height * 2, width * 3, height * 2);
+			fprintf(shellFile, "done\n");
+			fclose(shellFile);
 			break;
 		case VideoCommon::COHP42:
 			h = sqrt(m_width * m_height * sqrt(3) / 8);
@@ -161,6 +279,32 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
 			fprintf(file, "\n");
 			fprintf(file, "\n");
+
+			cohpShellDIr = shellDir + "\\COHP.sh";
+			shellFile = fopen(cohpShellDIr.c_str(), "w");
+			fprintf(shellFile, "#!/bin/bash\n");
+			fprintf(shellFile, "for((i=1;i<10;++i))\n");
+			fprintf(shellFile, "do\n");
+			fprintf(shellFile, "	w=`expr REPLACE \\* $i / 10`\n");
+			fprintf(shellFile, "	h=`expr REPLACE \\* $i / 10`\n");
+			fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+			fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+			fprintf(shellFile, "	o=0\n");
+			fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+			fprintf(shellFile, "	then \n");
+			fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+			fprintf(shellFile, "	then\n");
+			fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	echo \"$w $h\"\n");
+			fprintf(shellFile, "	pixel=${w}x${h}\n");
+			fprintf(shellFile, "	echo \"$pixel\"\n");
+			fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v REPLACExREPLACE -r 30 -i COHP42_REPLACExREPLACE_30Hz_8b_420.yuv "
+				"-s ${pixel} COHP42_${pixel}_30Hz_8b_420.yuv \n");
+			fprintf(shellFile, "done\n");
+			fclose(shellFile);
 			break;
 		case VideoCommon::EAC:
 			w = sqrt(m_height * m_width / 6);
@@ -192,6 +336,32 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
 			fprintf(file, "\n");
 			fprintf(file, "\n");
+
+			eacShellDIr = shellDir + "\\EAC.sh";
+			shellFile = fopen(eacShellDIr.c_str(), "w");
+			fprintf(shellFile, "#!/bin/bash\n");
+			fprintf(shellFile, "for((i=1;i<10;++i))\n");
+			fprintf(shellFile, "do\n");
+			fprintf(shellFile, "	w=`expr %d \\* $i / 10`\n", width * 3);
+			fprintf(shellFile, "	h=`expr %d \\* $i / 10`\n", height * 2);
+			fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+			fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+			fprintf(shellFile, "	o=0\n");
+			fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+			fprintf(shellFile, "	then \n");
+			fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+			fprintf(shellFile, "	then\n");
+			fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	echo \"$w $h\"\n");
+			fprintf(shellFile, "	pixel=${w}x${h}\n");
+			fprintf(shellFile, "	echo \"$pixel\"\n");
+			fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v %dx%d -r 30 -i EAC_%dx%d_30Hz_8b_420.yuv "
+				"-s ${pixel} EAC_${pixel}_30Hz_8b_420.yuv \n", width * 3, height * 2, width * 3, height * 2);
+			fprintf(shellFile, "done\n");
+			fclose(shellFile);
 			break;
 		case VideoCommon::ECP:
 			w = sqrt(m_height * m_width / 6);
@@ -223,6 +393,32 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
 			fprintf(file, "\n");
 			fprintf(file, "\n");
+
+			ecpShellDir = shellDir + "\\ECP.sh";
+			shellFile = fopen(ecpShellDir.c_str(), "w");
+			fprintf(shellFile, "#!/bin/bash\n");
+			fprintf(shellFile, "for((i=1;i<10;++i))\n");
+			fprintf(shellFile, "do\n");
+			fprintf(shellFile, "	w=`expr %d \\* $i / 10`\n", width * 3);
+			fprintf(shellFile, "	h=`expr %d \\* $i / 10`\n", height * 2);
+			fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+			fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+			fprintf(shellFile, "	o=0\n");
+			fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+			fprintf(shellFile, "	then \n");
+			fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+			fprintf(shellFile, "	then\n");
+			fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	echo \"$w $h\"\n");
+			fprintf(shellFile, "	pixel=${w}x${h}\n");
+			fprintf(shellFile, "	echo \"$pixel\"\n");
+			fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v %dx%d -r 30 -i ECP_%dx%d_30Hz_8b_420.yuv "
+				"-s ${pixel} ECP_${pixel}_30Hz_8b_420.yuv \n", width * 3, height * 2, width * 3, height * 2);
+			fprintf(shellFile, "done\n");
+			fclose(shellFile);
 			break;
 		case VideoCommon::our:
 			fprintf(file, "#======== File I/O =====================\n");
@@ -253,6 +449,32 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
 			fprintf(file, "\n");
 			fprintf(file, "\n");
+
+			ourShellDir = shellDir + "\\OUR.sh";
+			shellFile = fopen(ourShellDir.c_str(), "w");
+			fprintf(shellFile, "#!/bin/bash\n");
+			fprintf(shellFile, "for((i=1;i<10;++i))\n");
+			fprintf(shellFile, "do\n");
+			fprintf(shellFile, "	w=`expr %d \\* $i / 10`\n", m_width);
+			fprintf(shellFile, "	h=`expr %d \\* $i / 10`\n", m_height);
+			fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+			fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+			fprintf(shellFile, "	o=0\n");
+			fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+			fprintf(shellFile, "	then \n");
+			fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+			fprintf(shellFile, "	then\n");
+			fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	echo \"$w $h\"\n");
+			fprintf(shellFile, "	pixel=${w}x${h}\n");
+			fprintf(shellFile, "	echo \"$pixel\"\n");
+			fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v %dx%d -r 30 -i our_%dx%d_30Hz_8b_420.yuv "
+				"-s ${pixel} our_${pixel}_30Hz_8b_420.yuv \n", m_width, m_height, m_width, m_height);
+			fprintf(shellFile, "done\n");
+			fclose(shellFile);
 			break;
 		case VideoCommon::RSP:
 			w = sqrt(m_height * m_width / 6);
@@ -315,6 +537,32 @@ void CvtConfigGenerator::convertGenerate() {														//
 			fprintf(file, "### DO NOT DELETE THE EMPTY LINE BELOW ###\n");
 			fprintf(file, "\n");
 			fprintf(file, "\n");
+
+			tspShellDir = shellDir + "\\TSP.sh";
+			shellFile = fopen(tspShellDir.c_str(), "w");
+			fprintf(shellFile, "#!/bin/bash\n");
+			fprintf(shellFile, "for((i=1;i<10;++i))\n");
+			fprintf(shellFile, "do\n");
+			fprintf(shellFile, "	w=`expr %d \\* $i / 10`\n", width * 2);
+			fprintf(shellFile, "	h=`expr %d \\* $i / 10`\n", height);
+			fprintf(shellFile, "	w1=`expr $w %% 8`\n");
+			fprintf(shellFile, "	h1=`expr $h %% 8`\n");
+			fprintf(shellFile, "	o=0\n");
+			fprintf(shellFile, "	if [ \"$w1\" != $o ]\n");
+			fprintf(shellFile, "	then \n");
+			fprintf(shellFile, "		w=`expr 8 + $w / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	if [ \"$h1\" != $o ]\n");
+			fprintf(shellFile, "	then\n");
+			fprintf(shellFile, "		h=`expr 8 + $h / 8 \\* 8`\n");
+			fprintf(shellFile, "	fi\n");
+			fprintf(shellFile, "	echo \"$w $h\"\n");
+			fprintf(shellFile, "	pixel=${w}x${h}\n");
+			fprintf(shellFile, "	echo \"$pixel\"\n");
+			fprintf(shellFile, "	ffmpeg -f rawvideo -pix_fmt yuv420p -s:v %dx%d -r 30 -i TSP_%dx%d_30Hz_8b_420.yuv "
+				"-s ${pixel} TSP_${pixel}_30Hz_8b_420.yuv \n", width * 2, height, width * 2, height);
+			fprintf(shellFile, "done\n");
+			fclose(shellFile);
 			break;
 		}		
 		fclose(file);
@@ -383,6 +631,9 @@ void CvtConfigGenerator::getInfo()
 
 CvtConfigGenerator::~CvtConfigGenerator()
 {
+}
+
+void CvtConfigGenerator::shellGenerate() {
 }
 
 

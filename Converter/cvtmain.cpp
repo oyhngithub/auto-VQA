@@ -12,9 +12,13 @@
 						360test_test_sequence.cfg
 	 bat format:
 						format_widthxheight.bat
+	 shell script foramt:
+						format_widthxheight.sh
 	DIRECTORY:
 	 360Lib exe firectory:
 						C:\hm-360lib\HM-16.16\bin\vc2015\x64\Debug\Test\convert
+	 ffmpeg shell script outputdirectory:
+						C:\VRTest\sequence_cvt\DESCRIPTION\
 	 sequence outputdirectory: 
 						C:\VRTest\sequence_cvt\DESCRIPTION\
 	 sequence inputdirectory:

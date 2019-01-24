@@ -23,5 +23,6 @@ public:
 	void batGenerate();
 	void runBatch();
 	void getInfo();
+	void shellGenerate();
 };
 
