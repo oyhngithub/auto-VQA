@@ -11,8 +11,8 @@ CvtConfigGenerator::CvtConfigGenerator(char* inputVideoName):m_inputVideoName(in
 	getInfo();
 	testGenerate(inputVideoName, m_width, m_height, 1);
 	convertGenerate();
-	//batGenerate();
-	//runBatch();
+	batGenerate();
+	runBatch();
 }
 
 void CvtConfigGenerator::convertGenerate(int width, int height) {

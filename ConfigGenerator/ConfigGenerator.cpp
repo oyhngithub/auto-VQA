@@ -372,7 +372,7 @@ void ConfigGenerator::encoderGenerator() {
 		fprintf(encoder_360_format, "InputGeometryType                 : 13                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
 		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
-		fprintf(encoder_360_format, "CodingGeometryType                : 0\n");
+		fprintf(encoder_360_format, "CodingGeometryType                : 13\n");
 		fprintf(encoder_360_format, "CodingFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "SVideoRotation                    : 0 0 0                                # rotation along X, Y, Z;                 \n");
@@ -416,8 +416,8 @@ void ConfigGenerator::encoderGenerator() {
 	case VideoCommon::ACP:
 		fprintf(encoder_360_format, "#============ 360 video settings ======================\n");
 		fprintf(encoder_360_format, "SphereVideo                       : 1                                    # 1: 360 video; 0: traditional video;\n");
-		fprintf(encoder_360_format, "InputGeometryType                 : 0                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
-		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "InputGeometryType                 : 9                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
+		fprintf(encoder_360_format, "SourceFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "CodingGeometryType                : 9\n");
 		fprintf(encoder_360_format, "CodingFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
@@ -462,8 +462,8 @@ void ConfigGenerator::encoderGenerator() {
 	case VideoCommon::CISP:
 		fprintf(encoder_360_format, "#============ 360 video settings ======================\n");
 		fprintf(encoder_360_format, "SphereVideo                       : 1                                    # 1: 360 video; 0: traditional video;\n");
-		fprintf(encoder_360_format, "InputGeometryType                 : 0                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
-		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "InputGeometryType                 : 5                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
+		fprintf(encoder_360_format, "SourceFPStructure                 : 4 5   0 180 2 180 4 0 6 180 8 0   1 180 3 180 5 180 7 180 9 180    11 0 13 0 15 0 17 0 19 0   10 180 12 0 14 180 16 0 18 0      # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "                                                                        # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "CodingGeometryType                : 5\n");
@@ -510,8 +510,8 @@ void ConfigGenerator::encoderGenerator() {
 	case VideoCommon::CMP32:
 		fprintf(encoder_360_format, "#============ 360 video settings ======================\n");
 		fprintf(encoder_360_format, "SphereVideo                       : 1                                    # 1: 360 video; 0: traditional video;\n");
-		fprintf(encoder_360_format, "InputGeometryType                 : 0                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
-		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "InputGeometryType                 : 1                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
+		fprintf(encoder_360_format, "SourceFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "CodingGeometryType                : 1\n");
 		fprintf(encoder_360_format, "CodingFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
@@ -556,8 +556,8 @@ void ConfigGenerator::encoderGenerator() {
 	case VideoCommon::COHP42:
 		fprintf(encoder_360_format, "#============ 360 video settings ======================\n");
 		fprintf(encoder_360_format, "SphereVideo                       : 1                                    # 1: 360 video; 0: traditional video;\n");
-		fprintf(encoder_360_format, "InputGeometryType                 : 0                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence\n");
-		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "InputGeometryType                 : 3                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence\n");
+		fprintf(encoder_360_format, "SourceFPStructure                 : 4 2   2 270  3 90  6 90  7 270  0 270  1 90  4 90  5 270      # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "                                                                        # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "CodingGeometryType                : 3\n");
@@ -604,8 +604,8 @@ void ConfigGenerator::encoderGenerator() {
 	case VideoCommon::EAC:
 		fprintf(encoder_360_format, "#============ 360 video settings ======================\n");
 		fprintf(encoder_360_format, "SphereVideo                       : 1                                    # 1: 360 video; 0: traditional video;\n");
-		fprintf(encoder_360_format, "InputGeometryType                 : 0                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
-		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "InputGeometryType                 : 12                                   # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
+		fprintf(encoder_360_format, "SourceFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "CodingGeometryType                : 12\n");
 		fprintf(encoder_360_format, "CodingFPStructure                 : 2 3   4 0 0 0 5 0   3 180 1 270 2 0  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
@@ -650,11 +650,11 @@ void ConfigGenerator::encoderGenerator() {
 	case VideoCommon::ECP:
 		fprintf(encoder_360_format, "#============ 360 video settings ======================\n");
 		fprintf(encoder_360_format, "SphereVideo                       : 1                                    # 1: 360 video; 0: traditional video;\n");
-		fprintf(encoder_360_format, "InputGeometryType                 : 0                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
-		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "InputGeometryType                 : 11                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
+		fprintf(encoder_360_format, "SourceFPStructure                 : 2 3   2 0 3 0 4 0 1 90 5 270 0 90    # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "CodingGeometryType                : 11\n");
-		fprintf(encoder_360_format, "CodingFPStructure                 : 2 3   2 0 3 0 4 0 1 90 5 270 0 90  # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "CodingFPStructure                 : 2 3   2 0 3 0 4 0 1 90 5 270 0 90    # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "SVideoRotation                    : 0 0 0                                # rotation along X, Y, Z;                 \n");
 		fprintf(encoder_360_format, "CodingFaceWidth                   : 1184                                 # 0: automatic calculation; 1184 for 8K; 960 for 4K;\n");
@@ -696,8 +696,8 @@ void ConfigGenerator::encoderGenerator() {
 	case VideoCommon::RSP:
 		fprintf(encoder_360_format, "#============ 360 video settings ======================\n");
 		fprintf(encoder_360_format, "SphereVideo                       : 1                                    # 1: 360 video; 0: traditional video;\n");
-		fprintf(encoder_360_format, "InputGeometryType                 : 0                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
-		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "InputGeometryType                 : 10                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
+		fprintf(encoder_360_format, "SourceFPStructure                 : 2 3   4 0 0 0 5 0   3 0 1 0 2 0      # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "CodingGeometryType                : 10\n");
 		fprintf(encoder_360_format, "CodingFPStructure                 : 2 3   4 0 0 0 5 0   3 0 1 0 2 0      # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
@@ -742,8 +742,8 @@ void ConfigGenerator::encoderGenerator() {
 	case VideoCommon::TSP:
 		fprintf(encoder_360_format, "#============ 360 video settings ======================\n");
 		fprintf(encoder_360_format, "SphereVideo                       : 1                                    # 1: 360 video; 0: traditional video;\n");
-		fprintf(encoder_360_format, "InputGeometryType                 : 0                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
-		fprintf(encoder_360_format, "SourceFPStructure                 : 1 1   0 0                            # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
+		fprintf(encoder_360_format, "InputGeometryType                 : 7                                    # 0: equirectangular; 1: cubemap; 2: equalarea; this should be in the cfg of per sequence.\n");
+		fprintf(encoder_360_format, "SourceFPStructure                 : 1 2   0 0 1 0                        # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
 		fprintf(encoder_360_format, "                                                                         # rotation degrees[0, 90, 180, 270] is anti-clockwise;\n");
 		fprintf(encoder_360_format, "CodingGeometryType                : 7\n");
 		fprintf(encoder_360_format, "CodingFPStructure                 : 1 2   0 0 1 0                        # frame packing order: numRows numCols Row0Idx0 ROT Row0Idx1 ROT ... Row1...\n");
