@@ -3,8 +3,9 @@ input: video name frame size
 output: generate different types of cfg files and bat according to the projection type in video name 
 
 input format: 
-			format_widthxheight_30Hz_8b_420.yuv
+			description
 output format: 
+			dir:C:\VRTest\sequence_cvt\description\format\
 			sphere_655362.txt
 			DynamicViewports.cfg
 			encoder_360_format.cfg
@@ -15,8 +16,8 @@ output format:
 #include "ConfigGenerator.h"
 #include "cstdio"
 #include "assert.h"
-#include "VideoCommon.h"
 #include "TestRunner.h"
+
 
 int main(int argc, char* argv[]) {
 	

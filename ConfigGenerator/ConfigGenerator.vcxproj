@@ -131,12 +131,12 @@
     <ClCompile Include="ConfigGenerator.cpp" />
     <ClCompile Include="genmain.cpp" />
     <ClCompile Include="TestRunner.cpp" />
-    <ClCompile Include="VideoCommon.cpp" />
+    <ClCompile Include="VideoCom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConfigGenerator.h" />
     <ClInclude Include="TestRunner.h" />
-    <ClInclude Include="VideoCommon.h" />
+    <ClInclude Include="VideoCom.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

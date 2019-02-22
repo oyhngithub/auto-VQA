@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "VideoCommon.h"
+#include "VideoCom.h"
 
 class ConfigGenerator {
 protected:
@@ -29,6 +29,8 @@ public:
 	void testGenerator();
 	void randomaccessGenerator();
 	void bashGenerator();
-	VideoCommon videoCommon;
+	void getInfo();
+	VideoCom videoCom;
+	void runBatch();
 };
 

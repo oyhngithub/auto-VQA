@@ -21,10 +21,10 @@
     <ClCompile Include="genmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="VideoCommon.cpp">
+    <ClCompile Include="TestRunner.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="TestRunner.cpp">
+    <ClCompile Include="VideoCom.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +32,10 @@
     <ClInclude Include="ConfigGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="VideoCommon.h">
+    <ClInclude Include="TestRunner.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="TestRunner.h">
+    <ClInclude Include="VideoCom.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

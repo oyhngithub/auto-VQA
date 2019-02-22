@@ -322,7 +322,14 @@ void CvtConfigGenerator::batGenerate() {
 			std::string outputCfgDir = outputDir + "/" + dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + ".bat";
 #pragma warning (disable : 4996)
 			FILE *file = fopen(outputCfgDir.c_str(), "w");
-			fprintf(file, "C:\\hm-360lib\\HM-16.16\\bin\\vc2015\\x64\\Debug\\Test\\convert\\TApp360Convert.exe -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360convert_ERP_%s_test_%sx%s.cfg -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360test_test_sequence.cfg", m_description.c_str(), dest[i].c_str(), dest[i].c_str(), std::to_string(w).c_str(), std::to_string(h).c_str(), m_description.c_str(), dest[i].c_str());
+			fprintf(file, "C:\\hm-360lib\\HM-16.16\\bin\\vc2015\\x64\\Debug\\Test\\convert\\TApp360Convert.exe -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360convert_ERP_%s_test_%sx%s.cfg -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360test_test_sequence.cfg\n", m_description.c_str(), dest[i].c_str(), dest[i].c_str(), std::to_string(w).c_str(), std::to_string(h).c_str(), m_description.c_str(), dest[i].c_str());
+			fclose(file);
+
+			outputCfgDir = outputDir + "/" + dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + "_pause.bat";
+#pragma warning (disable : 4996)
+			file = fopen(outputCfgDir.c_str(), "w");
+			fprintf(file, "C:\\hm-360lib\\HM-16.16\\bin\\vc2015\\x64\\Debug\\Test\\convert\\TApp360Convert.exe -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360convert_ERP_%s_test_%sx%s.cfg -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360test_test_sequence.cfg\n", m_description.c_str(), dest[i].c_str(), dest[i].c_str(), std::to_string(w).c_str(), std::to_string(h).c_str(), m_description.c_str(), dest[i].c_str());
+			fprintf(file, "pause\n");
 			fclose(file);
 		}
 		
