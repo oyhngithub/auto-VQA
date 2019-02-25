@@ -32,5 +32,8 @@ public:
 	void getInfo();
 	VideoCom videoCom;
 	void runBatch();
+	void generateFbBatch();
+	void runFbBatch();
+	void generateFeatures();
 };
 

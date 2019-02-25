@@ -28,6 +28,8 @@ int main(int argc, char* argv[]) {
 
 	ConfigGenerator configGenerator(argv[1]);
 	configGenerator.nameReader(argv[2]);
-	configGenerator.generator();
+	//configGenerator.generator();
 	//TestRunner testRunner(configGenerator.m_bashName);
+	configGenerator.generateFeatures();
+	configGenerator.generateFbBatch();
 }

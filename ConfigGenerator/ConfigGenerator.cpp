@@ -676,3 +676,100 @@ void ConfigGenerator::runBatch() {
 	}
 }
 
+void ConfigGenerator::generateFbBatch() {
+	for (int i = 0; i < 8; ++i) {
+		std::string outputDir = "C:\\VRTest\\sequence_cvt\\" + m_videoName + "_" + videoCom.dest[i] + "\\encodeCfg";
+		std::string resultDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/output";
+		std::string fbOutputDir = "C:\\VRTest\\sequence_cvt\\" + m_videoName + "_" + videoCom.dest[i] + "\\FBCfg";
+		std::string fbResultDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/FBoutput";
+		for (int j = 0; j < 5; ++j) {
+			VideoCom common;
+			int w = common.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][0];
+			int h = common.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][1];
+			std::string cfgName = fbOutputDir + "\\" + videoCom.dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + ".bat";
+			std::string cfg_pause = fbOutputDir + "\\" + videoCom.dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + "_pause.bat";
+#pragma warning (disable : 4996)
+			FILE* batch = fopen(cfgName.c_str(), "w");
+
+			const char* dest = videoCom.dest[i].c_str();
+			fprintf(batch, "C:\\VRTest\\bin\\FB_TAppEncoder.exe -c %s\\%s_%dx%d_encoder_randomaccess_main.cfg \
+				-c %s\\%s_%dx%d_encoder_360.cfg \
+				-c %s\\%s_%dx%d_360test.cfg -c C:\\VRTest\\common_cfg\\DynamicViewports.cfg \
+				--SphFile=C:\\VRTest\\common_cfg\\sphere_655362.txt \
+				--FeatureFile=C:\\VRTest\\sequence_cvt\\%s_%s\\FBCfg\\%s_%dx%d_30Hz_8b_420.txt \
+				>C:\\VRTest\\sequence_cvt\\%s_%s\\FBoutput\\%s_%dx%d_output.txt "
+				, outputDir.c_str(), dest, w, h, outputDir.c_str(), dest, w, h,
+				outputDir.c_str(), dest, w, h, m_videoName.c_str(), videoCom.dest[i].c_str(), videoCom.dest[i].c_str(), w, h,
+				m_videoName.c_str(), dest, dest, w, h);
+			fclose(batch);
+			//with pause
+			batch = fopen(cfg_pause.c_str(), "w");
+			fprintf(batch, "C:\\VRTest\\bin\\FB_TAppEncoder.exe -c %s\\%s_%dx%d_encoder_randomaccess_main.cfg \
+				-c %s\\%s_%dx%d_encoder_360.cfg \
+				-c %s\\%s_%dx%d_360test.cfg -c C:\\VRTest\\common_cfg\\DynamicViewports.cfg \
+				--SphFile=C:\\VRTest\\common_cfg\\sphere_655362.txt \
+				--FeatureFile=C:\\VRTest\\sequence_cvt\\%s_%s\\FBCfg\\%s_%dx%d_30Hz_8b_420.txt \
+				>C:\\VRTest\\sequence_cvt\\%s_%s\\FBoutput\\%s_%dx%d_output.txt "
+				, outputDir.c_str(), dest, w, h, outputDir.c_str(), dest, w, h,
+				outputDir.c_str(), dest, w, h, m_videoName.c_str(), videoCom.dest[i].c_str(), videoCom.dest[i].c_str(), w, h,
+				m_videoName.c_str(), dest, dest, w, h);
+			fprintf(batch, "pause");
+			fclose(batch);
+		}
+	}
+}
+
+void ConfigGenerator::generateFeatures() {
+	for (int i = 0; i < 8; ++i) {
+		for (int j = 0; j < 5; ++j) {
+			int w = videoCom.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][0];
+			int h = videoCom.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][1];
+
+			std::string outputDir = "C:\\VRTest\\sequence_cvt\\" + m_videoName + "_" + videoCom.dest[i] + "\\encodeCfg";
+			std::string resultDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/output";
+			std::string fbOutputDir = "C:\\VRTest\\sequence_cvt\\" + m_videoName + "_" + videoCom.dest[i] + "\\FBCfg";
+			std::string fbResultDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/FBoutput";
+			if (!boost::filesystem::exists(fbOutputDir)) {
+				boost::filesystem::create_directories(fbOutputDir);
+			}
+			if (!boost::filesystem::exists(fbResultDir)) {
+				boost::filesystem::create_directories(fbResultDir);
+			}
+
+			std::string cfgName = fbOutputDir + "\\generateFeature_" + videoCom.dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + ".bat";
+			std::string cfg_pause = fbOutputDir + "\\generateFeature_" + videoCom.dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + "_pause.bat";
+#pragma warning (disable : 4996)
+			FILE* batch = fopen(cfgName.c_str(), "w");
+
+			const char* dest = videoCom.dest[i].c_str();
+			fprintf(batch, "C:\\VRTest\\bin\\YUV2RGB.exe C:\\VRTest\\sequence_cvt\\%s_%s\\%s_%dx%d_30Hz_8b_420.yuv \
+				C:\\VRTest\\sequence_cvt\\%s_%s\\FBCfg\\%s_%dx%d_30Hz_8b_420.txt\n" ,
+				m_videoName.c_str(), videoCom.dest[i].c_str(), videoCom.dest[i].c_str(), w, h, 
+				m_videoName.c_str(), videoCom.dest[i].c_str(), videoCom.dest[i].c_str(), w, h);
+			fclose(batch);
+			//with pause
+			batch = fopen(cfg_pause.c_str(), "w");
+			fprintf(batch, "C:\\VRTest\\bin\\YUV2RGB.exe C:\\VRTest\\sequence_cvt\\%s_%s\\%s_%dx%d_30Hz_8b_420.yuv \
+				C:\\VRTest\\sequence_cvt\\%s_%s\\FBCfg\\%s_%dx%d_30Hz_8b_420.txt\n",
+				m_videoName.c_str(), videoCom.dest[i].c_str(), videoCom.dest[i].c_str(), w, h,
+				m_videoName.c_str(), videoCom.dest[i].c_str(), videoCom.dest[i].c_str(), w, h);
+			fprintf(batch, "pause");
+			fclose(batch);
+		}
+	}
+	for (int i = 0; i < 8; ++i) {
+		std::string batDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/FBCfg";
+		for (int j = 0; j < 5; ++j) {
+			VideoCom common;
+			int w = common.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][0];
+			int h = common.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][1];
+			std::string cfgName = batDir + "/generateFeature_" + videoCom.dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + ".bat";
+			system(cfgName.c_str());
+		}
+	}
+}
+
+void ConfigGenerator::runFbBatch() {
+
+}
+

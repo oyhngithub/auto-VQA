@@ -12,7 +12,7 @@ CvtConfigGenerator::CvtConfigGenerator(char* inputVideoName):m_inputVideoName(in
 	testGenerate(inputVideoName, m_width, m_height, 1);
 	convertGenerate();
 	batGenerate();
-	runBatch();
+	//runBatch();
 }
 
 void CvtConfigGenerator::convertGenerate(int width, int height) {
@@ -249,7 +249,7 @@ void CvtConfigGenerator::convertGenerate() {									//
 				break;
 			case VideoCommon::ERP:
 				fprintf(file, "#======== File I/O =====================\n");
-				fprintf(file, "OutputFile                    : %s\\our.yuv\n", videoOutputDir.c_str());
+				fprintf(file, "OutputFile                    : %s\\ERP.yuv\n", videoOutputDir.c_str());
 				fprintf(file, "#RefFile                       : reference_file_name\n");
 				fprintf(file, "\n");
 				fprintf(file, "#======== Unit definition ================\n");
