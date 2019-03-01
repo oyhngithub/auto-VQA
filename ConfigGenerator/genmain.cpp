@@ -32,4 +32,5 @@ int main(int argc, char* argv[]) {
 	//TestRunner testRunner(configGenerator.m_bashName);
 	configGenerator.generateFeatures();
 	configGenerator.generateFbBatch();
+	configGenerator.runFbBatch();
 }

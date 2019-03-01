@@ -757,6 +757,9 @@ void ConfigGenerator::generateFeatures() {
 			fclose(batch);
 		}
 	}
+}
+
+void ConfigGenerator::runFbBatch() {
 	for (int i = 0; i < 8; ++i) {
 		std::string batDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/FBCfg";
 		for (int j = 0; j < 5; ++j) {
@@ -767,9 +770,16 @@ void ConfigGenerator::generateFeatures() {
 			system(cfgName.c_str());
 		}
 	}
-}
-
-void ConfigGenerator::runFbBatch() {
-
+	//run FB-PSNR
+	for (int i = 0; i < 8; ++i) {
+		std::string batDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/FBCfg";
+		for (int j = 0; j < 5; ++j) {
+			VideoCom common;
+			int w = common.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][0];
+			int h = common.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][1];
+			std::string cfgName = batDir + "/" + videoCom.dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + ".bat";
+			system(cfgName.c_str());
+		}
+	}
 }
 
