@@ -35,5 +35,6 @@ public:
 	void generateFbBatch();
 	void runFbBatch();
 	void generateFeatures();
+	void generateFFmpegCfg();
 };
 

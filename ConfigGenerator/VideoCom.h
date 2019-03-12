@@ -22,6 +22,7 @@ public:
 	const static int m_resoType = 5;
 	static int sourceSize[m_projType][m_resoType][2];
 	static int faceSize[m_projType][m_resoType][2];
+	static int groundTruthSize[m_projType][2];
 	VideoCom();
 	void initialCom();
 	static std::string dest[m_projType];

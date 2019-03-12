@@ -28,9 +28,10 @@ int main(int argc, char* argv[]) {
 
 	ConfigGenerator configGenerator(argv[1]);
 	configGenerator.nameReader(argv[2]);
-	//configGenerator.generator();
+	configGenerator.generator();//Generate file for Encoder
 	//TestRunner testRunner(configGenerator.m_bashName);
 	configGenerator.generateFeatures();
 	configGenerator.generateFbBatch();
-	configGenerator.runFbBatch();
+	//configGenerator.runFbBatch();
+	//configGenerator.generateFFmpegCfg();
 }

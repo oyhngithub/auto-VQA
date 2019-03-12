@@ -783,3 +783,24 @@ void ConfigGenerator::runFbBatch() {
 	}
 }
 
+void ConfigGenerator::generateFFmpegCfg() {
+	for (int i = 0; i < 8; ++i) {
+		int w = VideoCom::groundTruthSize[i][0];
+		int h = VideoCom::groundTruthSize[i][1];
+		std::string shName = "C:\\VRTest\\FFmpeg\\" + m_videoName;
+		if (!boost::filesystem::exists(shName)) {
+			boost::filesystem::create_directories(shName);
+		}
+		shName += +"\\" + VideoCom::dest[i] + ".sh";
+		FILE * file = fopen(shName.c_str(), "w");
+		for (int j = 0; j < 5; ++j) {
+			int outWidth = VideoCom::sourceSize[i][j][0];
+			int outHeight = VideoCom::sourceSize[i][j][1];
+#pragma warning (disable : 4996)
+			fprintf(file, "ffmpeg -f rawvideo -pix_fmt yuv420p -s:v %dx%d -r 30 -i \
+				%s_%dx%d_30Hz_8b_420.yuv -s %dx%d %s_%dx%d_30Hz_8b_420.yuv\n",
+				w, h, VideoCom::dest[i].c_str(), w, h, outWidth, outHeight, VideoCom::dest[i].c_str(), outWidth, outHeight);
+		}
+		fclose(file);
+	}
+}
