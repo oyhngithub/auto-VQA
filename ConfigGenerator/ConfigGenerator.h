@@ -6,6 +6,7 @@
 class ConfigGenerator {
 protected:
 	std::string m_videoName;
+	std::string m_fullName;
 	std::string m_resolution;
 	std::string m_projectionType;
 
@@ -18,7 +19,7 @@ protected:
 public:
 	std::string m_bashName;
 	ConfigGenerator();
-	ConfigGenerator(char* argv);
+	ConfigGenerator(std::string fullName, const char* description);
 	virtual ~ConfigGenerator() {};
 	void getFrameNumber(const char* frameNumber);
 	void nameReader(char* frameNumber);

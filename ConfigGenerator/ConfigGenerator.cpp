@@ -3,8 +3,8 @@
 #include "boost/filesystem.hpp"
 
 ConfigGenerator::ConfigGenerator() {}
-ConfigGenerator::ConfigGenerator(char* argv)
-	:m_videoName(argv)
+ConfigGenerator::ConfigGenerator(std::string fullName, const char* description)
+	: m_fullName(fullName), m_videoName(description)
 {
 	videoCom.initialCom();
 }
@@ -682,6 +682,12 @@ void ConfigGenerator::generateFbBatch() {
 		std::string resultDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/output";
 		std::string fbOutputDir = "C:\\VRTest\\sequence_cvt\\" + m_videoName + "_" + videoCom.dest[i] + "\\FBCfg";
 		std::string fbResultDir = "C:/VRTest/sequence_cvt/" + m_videoName + "_" + videoCom.dest[i] + "/FBoutput";
+		if (!boost::filesystem::exists(fbOutputDir)) {
+			boost::filesystem::create_directories(fbOutputDir);
+		}
+		if (!boost::filesystem::exists(fbResultDir)) {
+			boost::filesystem::create_directories(fbResultDir);
+		}
 		for (int j = 0; j < 5; ++j) {
 			VideoCom common;
 			int w = common.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][0];
@@ -696,10 +702,10 @@ void ConfigGenerator::generateFbBatch() {
 				-c %s\\%s_%dx%d_encoder_360.cfg \
 				-c %s\\%s_%dx%d_360test.cfg -c C:\\VRTest\\common_cfg\\DynamicViewports.cfg \
 				--SphFile=C:\\VRTest\\common_cfg\\sphere_655362.txt \
-				--FeatureFile=C:\\VRTest\\sequence_cvt\\%s_%s\\FBCfg\\%s_%dx%d_30Hz_8b_420.txt \
+				--FeatureFile=C:\\VRTest\\features\\%s.txt \
 				>C:\\VRTest\\sequence_cvt\\%s_%s\\FBoutput\\%s_%dx%d_output.txt "
-				, outputDir.c_str(), dest, w, h, outputDir.c_str(), dest, w, h,
-				outputDir.c_str(), dest, w, h, m_videoName.c_str(), videoCom.dest[i].c_str(), videoCom.dest[i].c_str(), w, h,
+				, outputDir.c_str(), dest, w, h, outputDir.c_str(), dest, w, h, 
+				outputDir.c_str(), dest, w, h, m_videoName.c_str(),
 				m_videoName.c_str(), dest, dest, w, h);
 			fclose(batch);
 			//with pause
@@ -708,10 +714,10 @@ void ConfigGenerator::generateFbBatch() {
 				-c %s\\%s_%dx%d_encoder_360.cfg \
 				-c %s\\%s_%dx%d_360test.cfg -c C:\\VRTest\\common_cfg\\DynamicViewports.cfg \
 				--SphFile=C:\\VRTest\\common_cfg\\sphere_655362.txt \
-				--FeatureFile=C:\\VRTest\\sequence_cvt\\%s_%s\\FBCfg\\%s_%dx%d_30Hz_8b_420.txt \
-				>C:\\VRTest\\sequence_cvt\\%s_%s\\FBoutput\\%s_%dx%d_output.txt "
+				--FeatureFile=C:\\VRTest\\features\\%s.txt \
+				>C:\\VRTest\\sequence_cvt\\%s_%s\\FBoutput\\%s_%dx%d_output.txt \n"
 				, outputDir.c_str(), dest, w, h, outputDir.c_str(), dest, w, h,
-				outputDir.c_str(), dest, w, h, m_videoName.c_str(), videoCom.dest[i].c_str(), videoCom.dest[i].c_str(), w, h,
+				outputDir.c_str(), dest, w, h, m_videoName.c_str(),
 				m_videoName.c_str(), dest, dest, w, h);
 			fprintf(batch, "pause");
 			fclose(batch);
@@ -720,6 +726,31 @@ void ConfigGenerator::generateFbBatch() {
 }
 
 void ConfigGenerator::generateFeatures() {
+			std::string cfgDir = "C:/VRTest/features/cfg/";
+			std::string featuresFile = "C:/VRTest/features/" + m_videoName + ".txt";
+
+
+			if (!boost::filesystem::exists(cfgDir)) {
+				boost::filesystem::create_directories(cfgDir);
+			}
+
+			std::string cfgName = cfgDir + m_videoName + "_generateFeature.bat";
+			std::string cfg_pause = cfgDir + m_videoName + "_generateFeature_pause.bat";
+#pragma warning (disable : 4996)
+			FILE* batch = fopen(cfgName.c_str(), "w");
+
+			fprintf(batch, "C:\\VRTest\\bin\\YUV2RGB.exe C:\\VRTest\\sequence\\%s %s",
+				m_fullName.c_str(), featuresFile.c_str());
+			fclose(batch);
+			//with pause
+			batch = fopen(cfg_pause.c_str(), "w");
+			fprintf(batch, "C:\\VRTest\\bin\\YUV2RGB.exe C:\\VRTest\\sequence\\%s %s\n",
+				m_fullName.c_str(), featuresFile.c_str());
+			fprintf(batch, "pause");
+			fclose(batch);
+}
+
+/*void ConfigGenerator::generateFeatures() {
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 5; ++j) {
 			int w = videoCom.sourceSize[videoCom.str2geo[videoCom.dest[i]]][j][0];
@@ -757,7 +788,7 @@ void ConfigGenerator::generateFeatures() {
 			fclose(batch);
 		}
 	}
-}
+}*/
 
 void ConfigGenerator::runFbBatch() {
 	for (int i = 0; i < 8; ++i) {
