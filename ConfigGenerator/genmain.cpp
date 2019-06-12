@@ -21,8 +21,8 @@ output format:
 
 int main(int argc, char* argv[]) {
 	
-	if (argc != 3) {
-		printf("Please input file name, frame number before start!(like: Format_WidthxHeight_***.yuv 18)\n");
+	if (argc != 4) {
+		printf("Please input file name, frame number and base directory before start!(like: Format_WidthxHeight_***.yuv 18)\n");
 		return 0;
 	}
 

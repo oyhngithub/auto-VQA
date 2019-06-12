@@ -6,10 +6,11 @@ CvtConfigGenerator::CvtConfigGenerator()
 {
 }
 
-CvtConfigGenerator::CvtConfigGenerator(char* inputVideoName):m_inputVideoName(inputVideoName)
+CvtConfigGenerator::CvtConfigGenerator(char* dir, char* inputVideoName, int cnt):
+	m_baseDir(dir), m_inputVideoName(inputVideoName), m_frameCnt(cnt)
 {
 	getInfo();
-	testGenerate(inputVideoName, m_width, m_height, 1);
+	testGenerate(inputVideoName, m_width, m_height, m_frameCnt);
 	convertGenerate();
 	batGenerate();
 	//runBatch();
@@ -22,7 +23,7 @@ void CvtConfigGenerator::convertGenerate(int width, int height) {
 void CvtConfigGenerator::convertGenerate() {									//
 	std::string dest[8] = { "ACP", "CISP", "CMP32", "COHP42", "EAC", "ECP", "ERP", "our"};
 	for (int i = 0; i < 8; ++i) {
-		std::string outputDir = "C:/VRTest/sequence_cvt/" + m_description + "_" + dest[i] + "/cfg";
+		std::string outputDir = m_baseDir + "/VRTest/sequence_cvt/" + m_description + "_" + dest[i] + "/cfg";
 
 		if (!boost::filesystem::exists(outputDir.c_str())) {
 			boost::filesystem::create_directories(outputDir.c_str());
@@ -36,7 +37,7 @@ void CvtConfigGenerator::convertGenerate() {									//
 			//std::string cvtOutputDir = "C:/VRTest/ERP_" + dest[i] + "/" + cvtFileName;
 			std::string cvtOutputDir = outputDir + "/" + cvtFileName;
 			//std::string videoOutputDir = "C:\\VRTest\\sequence_cvt\\" + m_description;
-			std::string videoOutputDir = "C:/VRTest/sequence_cvt/" + m_description + "_" + dest[i];
+			std::string videoOutputDir = m_baseDir + "/VRTest/sequence_cvt/" + m_description + "_" + dest[i];
 #pragma warning (disable : 4996)
 			FILE* file = fopen(cvtOutputDir.c_str(), "w");
 
@@ -288,7 +289,7 @@ void CvtConfigGenerator::testGenerate(char* inputVideoName, int width, int heigh
 	std::string dest[8] = { "ACP", "CISP", "CMP32", "COHP42", "EAC", "ECP", "ERP", "our" };
 	for (int i = 0; i < 8; ++i) {
 		std::string outputName = "360test_test_sequence.cfg";
-		std::string outputDir = "C:/VRTest/sequence_cvt/" + m_description + "_" + dest[i] + "/cfg";
+		std::string outputDir = m_baseDir + "/VRTest/sequence_cvt/" + m_description + "_" + dest[i] + "/cfg";
 		if (!boost::filesystem::exists(outputDir)) {
 			boost::filesystem::create_directories(outputDir);
 		}
@@ -296,7 +297,7 @@ void CvtConfigGenerator::testGenerate(char* inputVideoName, int width, int heigh
 #pragma warning (disable : 4996)
 		FILE *file = fopen(outputDir.c_str(), "w");
 		fprintf(file, "#======== File I/O ===============\n");
-		fprintf(file, "InputFile                     : C:\\VRTest\\sequence\\%s\n", inputVideoName);
+		fprintf(file, "InputFile                     : %s\\VRTest\\sequence\\%s\n", m_baseDir.c_str(), inputVideoName);
 		fprintf(file, "InputBitDepth                 : 8           # Input bitdepth\n");
 		fprintf(file, "InputChromaFormat             : 420         # Ratio of luminance to chrominance samples\n");
 		fprintf(file, "FrameRate                     : 30          # Frame Rate per second\n");
@@ -314,7 +315,7 @@ void CvtConfigGenerator::testGenerate(char* inputVideoName, int width, int heigh
 void CvtConfigGenerator::batGenerate() {
 	std::string dest[8] = { "ACP", "CISP", "CMP32", "COHP42", "EAC", "ECP", "ERP", "our" };
 	for (int i = 0; i < 8; ++i) {
-		std::string outputDir = "C:/VRTest/sequence_cvt/" + m_description + "_" + dest[i] + "/cfg";
+		std::string outputDir = m_baseDir + "/VRTest/sequence_cvt/" + m_description + "_" + dest[i] + "/cfg";
 		for (int j = 0; j < 5; ++j) {
 			VideoCommon common;
 			int w = common.faceSize[videoCommon.str2geo[dest[i]]][j][0];
@@ -322,13 +323,19 @@ void CvtConfigGenerator::batGenerate() {
 			std::string outputCfgDir = outputDir + "/" + dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + ".bat";
 #pragma warning (disable : 4996)
 			FILE *file = fopen(outputCfgDir.c_str(), "w");
-			fprintf(file, "C:\\hm-360lib\\HM-16.16\\bin\\vc2015\\x64\\Debug\\Test\\convert\\TApp360Convert.exe -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360convert_ERP_%s_test_%sx%s.cfg -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360test_test_sequence.cfg\n", m_description.c_str(), dest[i].c_str(), dest[i].c_str(), std::to_string(w).c_str(), std::to_string(h).c_str(), m_description.c_str(), dest[i].c_str());
+			fprintf(file, "%s\\VRTest\\bin\\TApp360Convert.exe -c %s\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360convert_ERP_%s_test_%sx%s.cfg \
+			-c %s\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360test_test_sequence.cfg\n",
+				m_baseDir.c_str(), m_baseDir.c_str(), m_description.c_str(), dest[i].c_str(), dest[i].c_str(), std::to_string(w).c_str(), std::to_string(h).c_str(),
+				m_baseDir.c_str(), m_description.c_str(), dest[i].c_str());
 			fclose(file);
 
 			outputCfgDir = outputDir + "/" + dest[i] + "_" + std::to_string(w) + "x" + std::to_string(h) + "_pause.bat";
 #pragma warning (disable : 4996)
 			file = fopen(outputCfgDir.c_str(), "w");
-			fprintf(file, "C:\\hm-360lib\\HM-16.16\\bin\\vc2015\\x64\\Debug\\Test\\convert\\TApp360Convert.exe -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360convert_ERP_%s_test_%sx%s.cfg -c C:\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360test_test_sequence.cfg\n", m_description.c_str(), dest[i].c_str(), dest[i].c_str(), std::to_string(w).c_str(), std::to_string(h).c_str(), m_description.c_str(), dest[i].c_str());
+			fprintf(file, "%s\\VRTest\\bin\\TApp360Convert.exe -c %s\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360convert_ERP_%s_test_%sx%s.cfg \
+			-c %s\\VRTest\\sequence_cvt\\%s_%s\\cfg\\360test_test_sequence.cfg\n",
+				m_baseDir.c_str(), m_baseDir.c_str(), m_description.c_str(), dest[i].c_str(), dest[i].c_str(), std::to_string(w).c_str(), std::to_string(h).c_str(),
+				m_baseDir.c_str(), m_description.c_str(), dest[i].c_str());
 			fprintf(file, "pause\n");
 			fclose(file);
 		}
@@ -339,7 +346,7 @@ void CvtConfigGenerator::batGenerate() {
 void CvtConfigGenerator::runBatch() {
 	std::string dest[8] = { "ACP", "CISP", "CMP32", "COHP42", "EAC", "ECP", "ERP", "our" };
 	for (int i = 0; i < 8; ++i) {
-		std::string outputDir = "C:/VRTest/sequence_cvt/" + m_description + "_" + dest[i] + "/cfg";
+		std::string outputDir = m_baseDir + "/VRTest/sequence_cvt/" + m_description + "_" + dest[i] + "/cfg";
 		for (int j = 0; j < 5; ++j) {
 			VideoCommon common;
 			int w = common.faceSize[videoCommon.str2geo[dest[i]]][j][0];
