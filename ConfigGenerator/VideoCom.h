@@ -1,6 +1,9 @@
 #pragma once
 
 #include<map>
+#include<iostream>
+
+
 class VideoCom {
 private:
 

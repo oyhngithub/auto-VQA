@@ -6,10 +6,10 @@ CvtConfigGenerator::CvtConfigGenerator()
 {
 }
 
-CvtConfigGenerator::CvtConfigGenerator(char* inputVideoName):m_inputVideoName(inputVideoName)
+CvtConfigGenerator::CvtConfigGenerator(char* inputVideoName, int frameNum):m_inputVideoName(inputVideoName)
 {
 	getInfo();
-	testGenerate(inputVideoName, m_width, m_height, 1);
+	testGenerate(inputVideoName, m_width, m_height, frameNum);
 	convertGenerate();
 	batGenerate();
 	//runBatch();

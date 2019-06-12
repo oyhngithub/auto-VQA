@@ -13,7 +13,7 @@ private:
 	int m_frameSize;
 	
 public:
-	CvtConfigGenerator(char* inputVideoName);
+	CvtConfigGenerator(char* inputVideoName, int);
 	CvtConfigGenerator();
 	void testGenerate(char* inputVideoName, int width, int height, int frameSize);
 	void convertGenerate(int width, int height);

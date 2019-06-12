@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
 	configGenerator.nameReader(argv[2]);
 	configGenerator.generator();//Generate file for Encoder
 	//TestRunner testRunner(configGenerator.m_bashName);
-	configGenerator.generateFeatures();
-	configGenerator.generateFbBatch();
+	//configGenerator.generateFeatures();
+	//configGenerator.generateFbBatch();
 	//configGenerator.runFbBatch();
 	//configGenerator.generateFFmpegCfg();
 }

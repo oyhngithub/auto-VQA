@@ -28,7 +28,13 @@
  */
 
 #include"CvtConfigGenerator.h"
-int main(int argc, char* args[]) {
-	CvtConfigGenerator cvtGenerator(args[1]);
+int main(int argc, char* argv[]) {
 
+
+	if (argc != 3) {
+		printf("Please input file name, frame number before start!(like: Format_WidthxHeight_***.yuv 18)\n");
+		return 0;
+	}
+	std::string frameNum = argv[2];
+	CvtConfigGenerator cvtGenerator(argv[1], std::atoi(frameNum.c_str()));
 }
